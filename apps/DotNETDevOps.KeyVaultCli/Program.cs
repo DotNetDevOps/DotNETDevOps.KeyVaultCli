@@ -74,8 +74,8 @@ namespace DotNETDevOps.KeyVaultCli
         [Option("-c|--certificateName <CERTIFICATE_NAME>", "The certificate secret name", CommandOptionType.SingleValue)]
         public string CertificateName { get; set; }
 
-        [Option("--install", "Install the certificate to the machine",CommandOptionType.NoValue)]
-        public bool Install { get; }
+        [Option("-i|--install", "Install the certificate to the machine",CommandOptionType.NoValue)]
+        public bool Install { get; set; }
 
         private async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
