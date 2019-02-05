@@ -100,13 +100,13 @@ namespace DotNETDevOps.KeyVaultCli
             if (!certs.Any())
             {
                 var x509Certificate = cert = buildSelfSignedServerCertificate(CertificateName, "");
-                await keyvaultClient.SetSecretAsync(vaultUri, CertificateName, Convert.ToBase64String(x509Certificate.Export(X509ContentType.Pkcs12)), null, "application/x-pkcs12");
+                await keyvaultClient.SetSecretAsync(vaultUri, CertificateName, Convert.ToBase64String(x509Certificate.Export(X509ContentType.Pkcs12,"")), null, "application/x-pkcs12");
 
             }
             else
             {
                 var certSecret = await keyvaultClient.GetSecretAsync(certs.First().Id);
-                cert = new X509Certificate2(Convert.FromBase64String(certSecret.Value));
+                cert = new X509Certificate2(Convert.FromBase64String(certSecret.Value),"", X509KeyStorageFlags.Exportable);
             }
 
 
@@ -120,7 +120,7 @@ namespace DotNETDevOps.KeyVaultCli
 
             if (!string.IsNullOrEmpty(Out))
             {
-                File.WriteAllBytes(Out,cert.Export(X509ContentType.Pkcs12));
+                File.WriteAllBytes(Out,cert.Export(X509ContentType.Pkcs12,""));
             }
 
 
