@@ -74,18 +74,13 @@ namespace DotNETDevOps.KeyVaultCli
         [Option("-c|--certificateName <CERTIFICATE_NAME>", "The certificate secret name", CommandOptionType.SingleValue)]
         public string CertificateName { get; set; }
 
-        [Option("--install", "The certificate secret name", CommandOptionType.SingleValue)]
+        [Option("--install", CommandOptionType.SingleOrNoValue)]
         public bool Install { get; }
 
         private async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
 
-            // var secretName = "AscendXYZGatewayPrincipal";
-            // var certificateName = "AscendXYZGatewayPrincipalCertificate";
-            // var vaultName = "ascendxyz";
-
-
-
+        
  
 
 
