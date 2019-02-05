@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -77,6 +78,9 @@ namespace DotNETDevOps.KeyVaultCli
         [Option("-i|--install", "Install the certificate to the machine",CommandOptionType.NoValue)]
         public bool Install { get; set; }
 
+        [Option("-o|--out", "save the certificate", CommandOptionType.SingleValue)]
+        public string Out { get; set; }
+
         private async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
 
@@ -92,6 +96,7 @@ namespace DotNETDevOps.KeyVaultCli
 
             var certs = await keyvaultClient.GetSecretVersionsAsync(vaultUri, CertificateName);
             X509Certificate2 cert = null;
+             
             if (!certs.Any())
             {
                 var x509Certificate = cert = buildSelfSignedServerCertificate(CertificateName, "");
@@ -112,6 +117,13 @@ namespace DotNETDevOps.KeyVaultCli
 
             string encrypted64 = Convert.ToBase64String(env.Encode());
             Console.WriteLine(encrypted64);
+
+            if (!string.IsNullOrEmpty(Out))
+            {
+                File.WriteAllBytes(Out,cert.Export(X509ContentType.Pkcs12));
+            }
+
+
             if (Install)
             {
                 Console.WriteLine($"installing {cert.Thumbprint} to CurrentUser.My");
